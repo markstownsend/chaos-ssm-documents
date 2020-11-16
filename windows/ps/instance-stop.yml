@@ -1,0 +1,14 @@
+description: >-
+  # Instance Stop
+  
+  Moves this instance to the stopped state
+  
+schemaVersion: "2.2"
+mainSteps:
+  - name: Act
+    action: "aws:runPowerShellScript"
+    inputs:
+      runCommand:
+      - |
+        $thisInstanceId = Get-EC2InstanceMetaData -Category InstanceId
+        Stop-EC2Instance -InstanceId $thisInstanceId
