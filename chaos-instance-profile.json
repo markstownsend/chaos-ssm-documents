@@ -54,7 +54,10 @@
             "Action": [
                 "ec2:StartInstances",
                 "ec2:StopInstances",
-                "ec2:DescribeTags"
+                "ec2:DescribeTags",
+                "ec2:TerminateInstances",
+                "ec2:DescribeVolumes",
+                "ec2:DetachVolume"
             ],
             "Resource": "*",
             "Condition": {

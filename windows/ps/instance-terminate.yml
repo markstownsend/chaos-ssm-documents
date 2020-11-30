@@ -1,0 +1,14 @@
+description: >-
+  # Instance Terminate Force
+  
+  Terminates the instance forcibly
+  
+schemaVersion: "2.2"
+mainSteps:
+  - name: Act
+    action: "aws:runPowerShellScript"
+    inputs:
+      runCommand:
+      - |
+        $thisInstanceId = Get-EC2InstanceMetaData -Category InstanceId
+        Remove-EC2Instance -InstanceId $thisInstanceId -Force

@@ -1,0 +1,16 @@
+description: >-
+  # Force EBS Detachment
+  
+  Forced detachment of all EBS volumes.
+  This may lead to the instance being unable to remount the 
+  volumes given they are removed from underneath the filesystem.
+  
+schemaVersion: "2.2"
+mainSteps:
+  - name: Act
+    action: "aws:runPowerShellScript"
+    inputs:
+      runCommand:
+      - |
+        $thisInstanceId = Get-EC2InstanceMetaData -Category InstanceId
+        Stop-EC2Instance -InstanceId $thisInstanceId
