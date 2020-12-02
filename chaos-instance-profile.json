@@ -50,7 +50,8 @@
             "Resource": "*"
         },
         {
-            "Effect": "Allow",
+            "Sid": "ToOperateOnTheChaosEligibleInstances"
+	    "Effect": "Allow",
             "Action": [
                 "ec2:StartInstances",
                 "ec2:StopInstances",
@@ -65,6 +66,18 @@
                     "ec2:ResourceTag/SSMTag": "chaos-ready"
                 }
             }
-        }
+        },
+	{
+	    "Sid": "ToEnumerateTheVolumesForDetachment"
+	    "Effect": "Allow",
+	    "Action": [
+		"ec2:DescribeInstances",
+		"ec2:DescribeVolumes",
+		"ec2:DescribeVolumeAttribute",
+		"ec2:DescribeInstanceAttribute",
+		"ec2:DetachVolume"
+	    ],
+	    "Resource": "*"
+	}
     ]
 }

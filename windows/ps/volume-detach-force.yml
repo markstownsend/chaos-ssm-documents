@@ -1,9 +1,9 @@
 description: >-
   # Force EBS Detachment
   
-  Forced detachment of all EBS volumes.
+  Forced detachment of a single non-root EBS volume.
   This may lead to the instance being unable to remount the 
-  volumes given they are removed from underneath the filesystem.
+  volume given they are removed from underneath the filesystem.
   
 schemaVersion: "2.2"
 mainSteps:
@@ -13,4 +13,10 @@ mainSteps:
       runCommand:
       - |
         $thisInstanceId = Get-EC2InstanceMetaData -Category InstanceId
-        Stop-EC2Instance -InstanceId $thisInstanceId
+	$theRootVolume = Get-EC2InstanceAttribute -InstanceId $thisInstanceId -Attribute rootDeviceName
+	$blockDeviceMappings = Get-EC2InstanceAttribute -InstanceId $thisInstanceId -Attribute blockDeviceMapping | Select-Object BlockDeviceMappings
+	$allVolumeAttachments = Get-EC2Volume | Select-Object -ExpandProperty Attachments
+	$firstNonRootVolume = $allVolumeAttachments | Where-Object{$_.InstanceId -eq $thisInstanceId -And $_.Device -ne $theRootVolume.RootDeviceName}
+	if ($firstNonRootVolume -ne $null) {
+        	Dismount-EC2Volume -InstanceId $thisInstanceId -VolumeId $firstNonRootVolume.VolumeId -ForceDismount $true -Force
+        }
